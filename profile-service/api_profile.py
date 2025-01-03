@@ -53,25 +53,15 @@ def create_preferences():
     return result
 
 
-@app.route('/api/profile', methods=['GET'])
-def get_profile():
-    user_data, error = validate_jwt()
-    if error:
-        return jsonify({"error": error}), 401
-
-    user_id = user_data.get("logged_in_as")
-    profile = get_user_profile_with_hobbies(user_id)
+@app.route('/api/profile/<user>', methods=['GET'])
+def get_profile(user):
+    profile = get_user_profile_with_hobbies(user)
     return profile
 
 
-@app.route('/api/profile/preferences', methods=['GET'])
-def get_preferences():
-    user_data, error = validate_jwt()
-    if error:
-        return jsonify({"error": error}), 401
-
-    user_id = user_data.get("logged_in_as")
-    preferences = get_user_preferences(user_id)
+@app.route('/api/profile/preferences/<user>', methods=['GET'])
+def get_preferences(user):
+    preferences = get_user_preferences(user)
     return preferences
 
 
