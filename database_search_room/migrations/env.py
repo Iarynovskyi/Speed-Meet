@@ -10,7 +10,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 
-from database_auth.models.users import db
+from database_search_room.models.search_room import db, SearchRoom
 #from database_auth.models import User,UserPreference, Stream, SportIndex, Sport, News, ClubPreference, BlobIndex, Interaction, TeamIndex
 
 # this is the Alembic Config object, which provides
