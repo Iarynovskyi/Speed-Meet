@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="auth" class="container">
+        <h1>Login</h1>
+        <input type="text" id="login-username" placeholder="Username" />
+        <input type="password" id="login-password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+        <button onclick="showRegister()">Register</button>
+    </div>
+
+    <div id="register" class="container hidden">
+        <h1>Register</h1>
+        <input type="text" id="register-username" placeholder="Username" />
+        <input type="password" id="register-password" placeholder="Password" />
+        <input type="text" id="register-email" placeholder="Email" />
+
+        <button onclick="register()">Register</button>
+        <button onclick="showLogin()">Back to Login</button>
+    </div>
+
+    <div id="profile" class="container hidden">
+        <h1>Profile</h1>
+        <input type="text" id="first-name" placeholder="Name" />
+        <input type="text" id="last-name" placeholder="Name" />
+        <input type="number" id="profile-age" placeholder="Age" />
+        <input type="number" id="profile-info" placeholder="Info" />
+        <select id="profile-gender">
+            <option value="">Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <input type="text" id="profile-country" placeholder="Country" />
+        <input type="text" id="profile-hobbies" placeholder="Hobbies (comma separated)" />
+        <button onclick="saveProfile()">Save Profile</button>
+        <button onclick="startSearch()">Start Search</button>
+    </div>
+
+    <script>
+        function showRegister() {
+            document.getElementById('auth').classList.add('hidden');
+            document.getElementById('register').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('auth').classList.remove('hidden');
+        }
+
+        function showProfile() {
+            document.getElementById('auth').classList.add('hidden');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('profile').classList.remove('hidden');
+        }
+
+        async function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const email = document.getElementById('login-email').value;
+
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, email })
+            });
+
+            if (response.ok) {
+                showProfile();
+            } else {
+                alert('Login failed');
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const email = document.getElementById('register-email').value;
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, email })
+            });
+
+            if (response.ok) {
+                showLogin();
+            } else {
+                alert('Registration failed');
+            }
+        }
+
+        async function saveProfile() {
+            const name = document.getElementById('profile-name').value;
+            const age = document.getElementById('profile-age').value;
+            const gender = document.getElementById('profile-gender').value;
+            const country = document.getElementById('profile-country').value;
+            const hobbies = document.getElementById('profile-hobbies').value.split(',').map(hobby => hobby.trim());
+            const info = document.getElementById('profile-info').value;
+
+            const response = await fetch('/api/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, age, gender, country, hobbies, info })
+            });
+
+            if (response.ok) {
+                alert('Profile saved');
+            } else {
+                alert('Failed to save profile');
+            }
+        }
+
+        function startSearch() {
+            window.location.href = '/search';
+        }
+    </script>
+</body>
+</html>

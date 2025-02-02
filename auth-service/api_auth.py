@@ -7,15 +7,16 @@ from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from config_auth import Config
 from dto_auth.api_input import UserDTO
-from business_auth import check_user_register, check_user_login
+from business_auth import check_user_register, check_user_login, token_required
 from database_auth.models.users import db
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 jwt = JWTManager(app)
 db.init_app(app)
-
+CORS(app)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -34,7 +35,7 @@ def login():
 
 @app.route('/protected', methods=['GET'])
 #@jwt_required(refresh=True)
-@jwt_required()
+@token_required
 def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user)

@@ -10,10 +10,13 @@ from business_profile import (
 )
 from database_profile.models.user_profiles import db, Country, Hobby
 from jwt import validate_jwt
+from flask_cors import CORS
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+CORS(app)
 
 @app.route('/api/profile', methods=['POST'])
 def profile_endpoint():
