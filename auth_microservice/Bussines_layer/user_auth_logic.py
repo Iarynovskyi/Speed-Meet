@@ -311,3 +311,7 @@ class UserAuthLogic:
         )
 
         return user
+
+
+    async def verify_jwt(self, token: str):
+        pass

@@ -113,3 +113,18 @@ async def refresh(service: UserAuthLogic = Provide[Container.user_service]):
 
     except Exception as e:
         print(e)
+
+
+@auth_app.route("/verify", methods=['GET'])
+@inject
+# @handle_exceptions
+# @logger.log_function_call()
+async def verify_token(token: str, service: UserAuthLogic = Provide[Container.user_service]):
+    try:
+        decoded_token = service.verify_jwt(token)
+        return jsonify(decoded_token)
+
+    except CustomQSportException as e:
+        logger.error(f"Error in /verify: {str(e)}")
+        return get_custom_error_response(e)
+
